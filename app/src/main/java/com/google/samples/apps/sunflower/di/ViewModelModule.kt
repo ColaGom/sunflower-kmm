@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,16 @@
 
 package com.google.samples.apps.sunflower.di
 
-import com.google.samples.apps.sunflower.data.AppDatabase
+import com.google.samples.apps.sunflower.viewmodels.GalleryViewModel
+import com.google.samples.apps.sunflower.viewmodels.GardenPlantingListViewModel
+import com.google.samples.apps.sunflower.viewmodels.PlantDetailViewModel
+import com.google.samples.apps.sunflower.viewmodels.PlantListViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
-val databaseModule = module {
-    single { AppDatabase.getInstance(get()) }
-    factory { get<AppDatabase>().plantDao() }
-    factory { get<AppDatabase>().gardenPlantingDao() }
+val viewModelModule = module {
+    viewModelOf(::GalleryViewModel)
+    viewModelOf(::GardenPlantingListViewModel)
+    viewModelOf(::PlantDetailViewModel)
+    viewModelOf(::PlantListViewModel)
 }

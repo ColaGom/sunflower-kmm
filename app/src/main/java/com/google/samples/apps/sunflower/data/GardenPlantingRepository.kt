@@ -16,11 +16,7 @@
 
 package com.google.samples.apps.sunflower.data
 
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class GardenPlantingRepository @Inject constructor(
+class GardenPlantingRepository(
     private val gardenPlantingDao: GardenPlantingDao
 ) {
 
@@ -41,7 +37,8 @@ class GardenPlantingRepository @Inject constructor(
     companion object {
 
         // For Singleton instantiation
-        @Volatile private var instance: GardenPlantingRepository? = null
+        @Volatile
+        private var instance: GardenPlantingRepository? = null
 
         fun getInstance(gardenPlantingDao: GardenPlantingDao) =
             instance ?: synchronized(this) {

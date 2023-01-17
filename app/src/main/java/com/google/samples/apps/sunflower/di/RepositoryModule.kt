@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.sunflower.viewmodels
+package com.google.samples.apps.sunflower.di
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
+import com.google.samples.apps.sunflower.data.GardenPlantingRepository
+import com.google.samples.apps.sunflower.data.PlantRepository
 import com.google.samples.apps.sunflower.data.UnsplashRepository
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
 
-class GalleryViewModel(
-    savedStateHandle: SavedStateHandle,
-    repository: UnsplashRepository
-) : ViewModel() {
-
-    private var queryString: String? = savedStateHandle["plantName"]
-
-    val plantPictures =
-        repository.getSearchResultStream(queryString ?: "").cachedIn(viewModelScope)
+val repositoryModule = module {
+    singleOf(::UnsplashRepository)
+    singleOf(::GardenPlantingRepository)
+    singleOf(::PlantRepository)
 }

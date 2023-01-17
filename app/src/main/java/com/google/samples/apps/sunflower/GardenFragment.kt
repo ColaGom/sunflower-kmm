@@ -29,9 +29,7 @@ import com.google.accompanist.themeadapter.material.MdcTheme
 import com.google.samples.apps.sunflower.adapters.PLANT_LIST_PAGE_INDEX
 import com.google.samples.apps.sunflower.compose.garden.GardenScreen
 import com.google.samples.apps.sunflower.data.Plant
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class GardenFragment : Fragment() {
 
     override fun onCreateView(

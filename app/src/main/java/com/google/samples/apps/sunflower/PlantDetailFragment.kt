@@ -30,13 +30,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.accompanist.themeadapter.material.MdcTheme
 import com.google.samples.apps.sunflower.compose.plantdetail.PlantDetailsScreen
 import com.google.samples.apps.sunflower.viewmodels.PlantDetailViewModel
-import dagger.hilt.android.AndroidEntryPoint
-import kotlin.text.Typography.dagger
 
 /**
  * A fragment representing a single Plant detail screen.
  */
-@AndroidEntryPoint
 class PlantDetailFragment : Fragment() {
 
     private val plantDetailViewModel: PlantDetailViewModel by viewModels()

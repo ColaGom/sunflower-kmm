@@ -16,26 +16,17 @@
 
 package com.google.samples.apps.sunflower.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.samples.apps.sunflower.BuildConfig
 import com.google.samples.apps.sunflower.PlantDetailFragment
 import com.google.samples.apps.sunflower.data.GardenPlantingRepository
 import com.google.samples.apps.sunflower.data.PlantRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import kotlin.text.Typography.dagger
 
 /**
  * The ViewModel used in [PlantDetailFragment].
  */
-@HiltViewModel
-class PlantDetailViewModel @Inject constructor(
+class PlantDetailViewModel(
     savedStateHandle: SavedStateHandle,
     plantRepository: PlantRepository,
     private val gardenPlantingRepository: GardenPlantingRepository,
