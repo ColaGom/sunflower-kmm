@@ -15,3 +15,4 @@
 
 2. Extract `shared` module from `android`
 3. Implement `iosApp` using `shared`
+4. Migrate `test` codes
