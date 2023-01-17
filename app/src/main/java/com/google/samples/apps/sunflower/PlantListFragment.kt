@@ -19,14 +19,14 @@ package com.google.samples.apps.sunflower
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.google.samples.apps.sunflower.adapters.PlantAdapter
 import com.google.samples.apps.sunflower.databinding.FragmentPlantListBinding
 import com.google.samples.apps.sunflower.viewmodels.PlantListViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlantListFragment : Fragment() {
 
-    private val viewModel: PlantListViewModel by viewModels()
+    private val viewModel: PlantListViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

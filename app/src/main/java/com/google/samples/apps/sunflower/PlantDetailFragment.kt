@@ -24,19 +24,19 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.app.ShareCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.accompanist.themeadapter.material.MdcTheme
 import com.google.samples.apps.sunflower.compose.plantdetail.PlantDetailsScreen
 import com.google.samples.apps.sunflower.viewmodels.PlantDetailViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A fragment representing a single Plant detail screen.
  */
 class PlantDetailFragment : Fragment() {
 
-    private val plantDetailViewModel: PlantDetailViewModel by viewModels()
+    private val plantDetailViewModel: PlantDetailViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
