@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.sunflower.data
+package com.google.samples.apps.sunflower.ext
 
-import androidx.room.TypeConverter
-import java.util.Calendar
+import java.util.*
 
-/**
- * Type converters to allow Room to reference complex data types.
- */
-class Converters {
-    @TypeConverter fun calendarToDatestamp(calendar: Calendar): Long = calendar.timeInMillis
-
-    @TypeConverter fun datestampToCalendar(value: Long): Calendar =
-        Calendar.getInstance().apply { timeInMillis = value }
+fun Long.toCalendar(): Calendar = Calendar.getInstance().apply {
+    timeInMillis = this@toCalendar
 }

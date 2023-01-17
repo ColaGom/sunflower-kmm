@@ -20,9 +20,11 @@ plugins {
     id("kotlin-parcelize")
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
+    id("com.squareup.sqldelight")
 }
 
 android {
+    namespace = "com.google.samples.apps.sunflower"
     compileSdk = libs.versions.compileSdk.get().toInt()
     buildFeatures {
         dataBinding = true
@@ -104,8 +106,8 @@ androidComponents {
 }
 
 dependencies {
-    kapt(libs.androidx.room.compiler)
     implementation(libs.koin.core)
+    implementation(libs.koin.androidx.workmanager)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
     implementation(libs.androidx.appcompat)
@@ -118,7 +120,6 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.paging.runtime.ktx)
-    implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.material)
@@ -148,6 +149,8 @@ dependencies {
     implementation(libs.glide)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
+    implementation(libs.sql.delight.android)
+    implementation(libs.sql.delight.coroutine)
     // Testing dependencies
     androidTestImplementation(libs.androidx.arch.core.testing)
     androidTestImplementation(libs.androidx.espresso.contrib)

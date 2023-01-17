@@ -16,35 +16,69 @@
 
 package com.google.samples.apps.sunflower.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.util.*
 
 /**
  * The Data Access Object for the [GardenPlanting] class.
  */
-@Dao
-interface GardenPlantingDao {
-    @Query("SELECT * FROM garden_plantings")
-    fun getGardenPlantings(): Flow<List<GardenPlanting>>
+//@Dao
+class GardenPlantingDao(
+    private val queries: GardenPlantingsQueries
+) {
+    fun getGardenPlantings(): Flow<List<GardenPlanting>> =
+        queries.findAll(GardenPlanting::of).asFlow().mapToList()
 
-    @Query("SELECT EXISTS(SELECT 1 FROM garden_plantings WHERE plant_id = :plantId LIMIT 1)")
-    fun isPlanted(plantId: String): Flow<Boolean>
+    fun isPlanted(plantId: String): Flow<Boolean> =
+        queries.findByPlantId(plantId).asFlow().mapToOneOrNull().map { it != null }
 
-    /**
-     * This query will tell Room to query both the [Plant] and [GardenPlanting] tables and handle
-     * the object mapping.
-     */
-    @Transaction
-    @Query("SELECT * FROM plants WHERE id IN (SELECT DISTINCT(plant_id) FROM garden_plantings)")
-    fun getPlantedGardens(): Flow<List<PlantAndGardenPlantings>>
+    //    @Transaction
+//    @Query("SELECT * FROM plants WHERE id IN (SELECT DISTINCT(plant_id) FROM garden_plantings)")
+    fun getPlantedGardens(): Flow<List<PlantAndGardenPlantings>> =
+        queries.findAllWithPlant().asFlow().mapToList().map {
+            it.groupBy { it.plant_id }
+                .map { (_, values) ->
+                    val first = values.first()
+                    val plant = Plant.of(
+                        first.plant_id,
+                        first.name,
+                        first.description,
+                        first.grow_zone_number,
+                        first.watering_interval,
+                        first.image_url
+                    )
 
-    @Insert
-    suspend fun insertGardenPlanting(gardenPlanting: GardenPlanting): Long
+                    PlantAndGardenPlantings(
+                        plant,
+                        values.map {
+                            GardenPlanting.of(
+                                it.garden_plantings_id,
+                                it.plant_id,
+                                it.plant_date,
+                                it.last_watering_date
+                            )
+                        }
+                    )
+                }
+        }
 
-    @Delete
-    suspend fun deleteGardenPlanting(gardenPlanting: GardenPlanting)
+    fun insertGardenPlanting(plantId: String): Long =
+        queries.transactionWithResult {
+            val now = Calendar.getInstance().timeInMillis
+            queries.insert(
+                plantId,
+                now,
+                now
+            )
+
+            queries.lastInsertRowId().executeAsOne()
+        }
+
+    fun deleteGardenPlanting(gardenPlanting: GardenPlanting): Unit {
+        queries.deleteById(gardenPlanting.gardenPlantingId)
+    }
 }

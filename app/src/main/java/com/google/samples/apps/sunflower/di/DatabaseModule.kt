@@ -16,11 +16,53 @@
 
 package com.google.samples.apps.sunflower.di
 
-import com.google.samples.apps.sunflower.data.AppDatabase
+import android.content.Context
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteOpenHelper
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
+import com.google.samples.apps.sunflower.Database
+import com.google.samples.apps.sunflower.data.GardenPlantingDao
+import com.google.samples.apps.sunflower.data.PlantDao
+import com.google.samples.apps.sunflower.utilities.PLANT_DATA_FILENAME
+import com.google.samples.apps.sunflower.workers.SeedDatabaseWorker
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.squareup.sqldelight.db.SqlDriver
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val databaseModule = module {
-    single { AppDatabase.getInstance(get()) }
-    factory { get<AppDatabase>().plantDao() }
-    factory { get<AppDatabase>().gardenPlantingDao() }
+    single<SqlDriver> {
+        AndroidSqliteDriver(
+            Database.Schema,
+            get(),
+            "test.db",
+            callback = CustomCallback(get())
+        )
+    }
+    single { Database(get()) }
+    factory { get<Database>().gardenPlantingsQueries }
+    factory { get<Database>().plantsQueries }
+    factoryOf(::PlantDao)
+    factoryOf(::GardenPlantingDao)
+}
+
+private class CustomCallback(
+    private val context: Context
+) : SupportSQLiteOpenHelper.Callback(Database.Schema.version) {
+    private val delegate: AndroidSqliteDriver.Callback =
+        AndroidSqliteDriver.Callback(Database.Schema)
+
+    override fun onCreate(db: SupportSQLiteDatabase) {
+        delegate.onCreate(db)
+        val request = OneTimeWorkRequestBuilder<SeedDatabaseWorker>()
+            .setInputData(workDataOf(SeedDatabaseWorker.KEY_FILENAME to PLANT_DATA_FILENAME))
+            .build()
+        WorkManager.getInstance(context).enqueue(request)
+    }
+
+    override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        delegate.onUpgrade(db, oldVersion, newVersion)
+    }
 }

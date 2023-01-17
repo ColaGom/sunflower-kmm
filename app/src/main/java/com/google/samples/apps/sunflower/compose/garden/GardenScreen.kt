@@ -248,6 +248,7 @@ private class GardenScreenPreviewParamProvider :
                     ),
                     gardenPlantings = listOf(
                         GardenPlanting(
+                            gardenPlantingId = 1,
                             plantId = "1",
                             plantDate = Calendar.getInstance(),
                             lastWateringDate = Calendar.getInstance()

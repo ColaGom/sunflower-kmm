@@ -1,0 +1,39 @@
+CREATE TABLE garden_plantings(
+    garden_plantings_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    plant_id TEXT NOT NULL,
+    plant_date INTEGER NOT NULL,
+    last_watering_date INTEGER NOT NULL
+);
+
+CREATE INDEX idx_pi ON garden_plantings(plant_id);
+
+insert:
+INSERT INTO garden_plantings(plant_id, plant_date, last_watering_date)
+VALUES (?, ?, ?);
+
+findAll:
+SELECT *
+FROM garden_plantings;
+
+findAllWithPlant:
+SELECT *
+FROM garden_plantings
+JOIN plants ON plants.plant_id = garden_plantings.plant_id;
+
+findById:
+SELECT *
+FROM garden_plantings
+WHERE garden_plantings_id = :id;
+
+findByPlantId:
+SELECT *
+FROM garden_plantings
+WHERE plant_id = :id;
+
+lastInsertRowId:
+SELECT last_insert_rowid();
+
+deleteById:
+DELETE
+FROM garden_plantings
+WHERE garden_plantings_id = :id;

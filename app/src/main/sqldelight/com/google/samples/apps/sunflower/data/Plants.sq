@@ -1,0 +1,28 @@
+CREATE TABLE plants(
+    plant_id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    grow_zone_number INTEGER AS Int NOT NULL,
+    watering_interval INTEGER AS Int NOT NULL DEFAULT 7,
+    image_url TEXT NOT NULL DEFAULT ""
+);
+
+CREATE INDEX idx_gzn ON plants(grow_zone_number);
+
+insert:
+INSERT INTO plants(plant_id, name, description, grow_zone_number, watering_interval, image_url)
+VALUES ?;
+
+findAll:
+SELECT *
+FROM plants;
+
+findById:
+SELECT *
+FROM plants
+WHERE plant_id = :id;
+
+findByGrowZoneNumber:
+SELECT *
+FROM plants
+WHERE grow_zone_number = :zoneNumber;

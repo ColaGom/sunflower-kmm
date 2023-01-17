@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,12 @@
  * limitations under the License.
  */
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
+package com.google.samples.apps.sunflower.di
 
-    dependencies {
-        classpath(libs.android.gradle.plugin)
-        classpath(libs.kotlin.gradle.plugin)
-        classpath(libs.androidx.navigation.safe.args.gradle.plugin)
-        classpath(libs.sql.delight.plugin)
-    }
-}
+import com.google.samples.apps.sunflower.workers.SeedDatabaseWorker
+import org.koin.androidx.workmanager.dsl.workerOf
+import org.koin.dsl.module
 
-plugins {
-    id("com.diffplug.spotless") version "6.4.1"
-}
-
-spotless {
-    kotlin {
-        target("**/*.kt")
-        ktlint(libs.versions.ktlint.get()).userData(mapOf("max_line_length" to "100"))
-    }
+val workerModule = module {
+    workerOf(::SeedDatabaseWorker)
 }

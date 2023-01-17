@@ -16,15 +16,11 @@
 
 package com.google.samples.apps.sunflower.data
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.util.Calendar
+import java.util.*
 import java.util.Calendar.DAY_OF_YEAR
 
-@Entity(tableName = "plants")
 data class Plant(
-    @PrimaryKey @ColumnInfo(name = "id") val plantId: String,
+    val plantId: String,
     val name: String,
     val description: String,
     val growZoneNumber: Int,
@@ -40,4 +36,15 @@ data class Plant(
         since > lastWateringDate.apply { add(DAY_OF_YEAR, wateringInterval) }
 
     override fun toString() = name
+
+    companion object {
+        fun of(
+            plantId: String,
+            name: String,
+            description: String,
+            growZoneNumber: Int,
+            wateringInterval: Int,
+            imageUrl: String
+        ) = Plant(plantId, name, description, growZoneNumber, wateringInterval, imageUrl)
+    }
 }

@@ -16,16 +16,18 @@
 
 package com.google.samples.apps.sunflower.data
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 class GardenPlantingRepository(
     private val gardenPlantingDao: GardenPlantingDao
 ) {
 
-    suspend fun createGardenPlanting(plantId: String) {
-        val gardenPlanting = GardenPlanting(plantId)
-        gardenPlantingDao.insertGardenPlanting(gardenPlanting)
+    suspend fun createGardenPlanting(plantId: String) = withContext(Dispatchers.IO) {
+        gardenPlantingDao.insertGardenPlanting(plantId)
     }
 
-    suspend fun removeGardenPlanting(gardenPlanting: GardenPlanting) {
+    suspend fun removeGardenPlanting(gardenPlanting: GardenPlanting) = withContext(Dispatchers.IO) {
         gardenPlantingDao.deleteGardenPlanting(gardenPlanting)
     }
 
