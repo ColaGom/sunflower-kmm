@@ -17,10 +17,9 @@
 package com.google.samples.apps.sunflower.viewmodels
 
 import androidx.lifecycle.*
-import com.google.samples.apps.sunflower.BuildConfig
 import com.google.samples.apps.sunflower.PlantDetailFragment
-import com.google.samples.apps.sunflower.data.GardenPlantingRepository
-import com.google.samples.apps.sunflower.data.PlantRepository
+import com.google.samples.apps.sunflower.shared.data.GardenPlantingRepository
+import com.google.samples.apps.sunflower.shared.data.PlantRepository
 import kotlinx.coroutines.launch
 
 /**
@@ -52,7 +51,7 @@ class PlantDetailViewModel(
         _showSnackbar.value = false
     }
 
-    fun hasValidUnsplashKey() = (BuildConfig.UNSPLASH_ACCESS_KEY != "null")
+    fun hasValidUnsplashKey() = true
 
     companion object {
         private const val PLANT_ID_SAVED_STATE_KEY = "plantId"

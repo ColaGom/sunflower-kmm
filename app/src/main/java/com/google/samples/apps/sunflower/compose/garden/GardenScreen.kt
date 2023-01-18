@@ -44,9 +44,9 @@ import com.google.accompanist.themeadapter.material.MdcTheme
 import com.google.samples.apps.sunflower.R
 import com.google.samples.apps.sunflower.compose.card
 import com.google.samples.apps.sunflower.compose.utils.SunflowerImage
-import com.google.samples.apps.sunflower.data.GardenPlanting
-import com.google.samples.apps.sunflower.data.Plant
-import com.google.samples.apps.sunflower.data.PlantAndGardenPlantings
+import com.google.samples.apps.sunflower.shared.data.GardenPlanting
+import com.google.samples.apps.sunflower.shared.data.Plant
+import com.google.samples.apps.sunflower.shared.data.PlantAndGardenPlantings
 import com.google.samples.apps.sunflower.viewmodels.GardenPlantingListViewModel
 import com.google.samples.apps.sunflower.viewmodels.PlantAndGardenPlantingsViewModel
 import org.koin.androidx.compose.getViewModel
@@ -250,8 +250,6 @@ private class GardenScreenPreviewParamProvider :
                         GardenPlanting(
                             gardenPlantingId = 1,
                             plantId = "1",
-                            plantDate = Calendar.getInstance(),
-                            lastWateringDate = Calendar.getInstance()
                         )
                     )
                 )

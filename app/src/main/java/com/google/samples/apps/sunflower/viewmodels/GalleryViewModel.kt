@@ -19,8 +19,11 @@ package com.google.samples.apps.sunflower.viewmodels
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import com.google.samples.apps.sunflower.data.UnsplashRepository
+import com.google.samples.apps.sunflower.shared.data.UnsplashPhoto
+import com.google.samples.apps.sunflower.shared.data.UnsplashRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class GalleryViewModel(
     savedStateHandle: SavedStateHandle,
@@ -29,6 +32,13 @@ class GalleryViewModel(
 
     private var queryString: String? = savedStateHandle["plantName"]
 
-    val plantPictures =
-        repository.getSearchResultStream(queryString ?: "").cachedIn(viewModelScope)
+    private val _plantPictures = MutableStateFlow<List<UnsplashPhoto>>(emptyList())
+    val plantPictures = _plantPictures.asStateFlow()
+
+    init {
+        //TODO: pagination
+        viewModelScope.launch {
+            _plantPictures.value = repository.getSearchResultStream(queryString ?: "").results
+        }
+    }
 }

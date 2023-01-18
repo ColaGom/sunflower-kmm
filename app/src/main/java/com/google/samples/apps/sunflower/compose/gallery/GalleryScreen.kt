@@ -25,23 +25,20 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.samples.apps.sunflower.R
 import com.google.samples.apps.sunflower.compose.plantlist.PhotoListItem
-import com.google.samples.apps.sunflower.data.UnsplashPhoto
-import com.google.samples.apps.sunflower.data.UnsplashPhotoUrls
-import com.google.samples.apps.sunflower.data.UnsplashUser
+import com.google.samples.apps.sunflower.shared.data.UnsplashPhoto
+import com.google.samples.apps.sunflower.shared.data.UnsplashPhotoUrls
+import com.google.samples.apps.sunflower.shared.data.UnsplashUser
 import com.google.samples.apps.sunflower.viewmodels.GalleryViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -50,8 +47,9 @@ fun GalleryScreen(
     onPhotoClick: (UnsplashPhoto) -> Unit,
     onUpClick: () -> Unit,
 ) {
+    val items by viewModel.plantPictures.collectAsState()
     GalleryScreen(
-        plantPictures = viewModel.plantPictures,
+        plantPictures = items,
         onPhotoClick = onPhotoClick,
         onUpClick = onUpClick,
     )
@@ -59,7 +57,7 @@ fun GalleryScreen(
 
 @Composable
 private fun GalleryScreen(
-    plantPictures: Flow<PagingData<UnsplashPhoto>>,
+    plantPictures: List<UnsplashPhoto>,
     onPhotoClick: (UnsplashPhoto) -> Unit = {},
     onUpClick: () -> Unit = {},
 ) {
@@ -81,18 +79,15 @@ private fun GalleryScreen(
             )
         },
     ) { padding ->
-        val pagingItems: LazyPagingItems<UnsplashPhoto> = plantPictures.collectAsLazyPagingItems()
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier.padding(padding),
             contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.card_side_margin))
         ) {
-            // TODO update this implementation once paging Compose supports LazyGridScope
-            // See: https://issuetracker.google.com/issues/178087310
             items(
-                count = pagingItems.itemCount,
+                count = plantPictures.size,
             ) { index ->
-                val photo = pagingItems[index] ?: return@items
+                val photo = plantPictures[index]
                 PhotoListItem(photo = photo) {
                     onPhotoClick(photo)
                 }
@@ -104,31 +99,27 @@ private fun GalleryScreen(
 @Preview
 @Composable
 private fun GalleryScreenPreview(
-    @PreviewParameter(GalleryScreenPreviewParamProvider::class) plantPictures: Flow<PagingData<UnsplashPhoto>>
+    @PreviewParameter(GalleryScreenPreviewParamProvider::class) plantPictures: List<UnsplashPhoto>
 ) {
     GalleryScreen(plantPictures = plantPictures)
 }
 
 private class GalleryScreenPreviewParamProvider :
-    PreviewParameterProvider<Flow<PagingData<UnsplashPhoto>>> {
+    PreviewParameterProvider<List<UnsplashPhoto>> {
 
-    override val values: Sequence<Flow<PagingData<UnsplashPhoto>>> =
+    override val values: Sequence<List<UnsplashPhoto>> =
         sequenceOf(
-            flowOf(
-                PagingData.from(
-                    listOf(
-                        UnsplashPhoto(
-                            id = "1",
-                            urls = UnsplashPhotoUrls("https://images.unsplash.com/photo-1417325384643-aac51acc9e5d?q=75&fm=jpg&w=400&fit=max"),
-                            user = UnsplashUser("John Smith", "johnsmith")
-                        ),
-                        UnsplashPhoto(
-                            id = "2",
-                            urls = UnsplashPhotoUrls("https://images.unsplash.com/photo-1417325384643-aac51acc9e5d?q=75&fm=jpg&w=400&fit=max"),
-                            user = UnsplashUser("Sally Smith", "sallysmith")
-                        )
-                    )
+            listOf(
+                UnsplashPhoto(
+                    id = "1",
+                    urls = UnsplashPhotoUrls("https://images.unsplash.com/photo-1417325384643-aac51acc9e5d?q=75&fm=jpg&w=400&fit=max"),
+                    user = UnsplashUser("John Smith", "johnsmith")
+                ),
+                UnsplashPhoto(
+                    id = "2",
+                    urls = UnsplashPhotoUrls("https://images.unsplash.com/photo-1417325384643-aac51acc9e5d?q=75&fm=jpg&w=400&fit=max"),
+                    user = UnsplashUser("Sally Smith", "sallysmith")
                 )
-            ),
+            )
         )
 }

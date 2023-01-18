@@ -28,7 +28,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.accompanist.themeadapter.material.MdcTheme
 import com.google.samples.apps.sunflower.adapters.PLANT_LIST_PAGE_INDEX
 import com.google.samples.apps.sunflower.compose.garden.GardenScreen
-import com.google.samples.apps.sunflower.data.Plant
+import com.google.samples.apps.sunflower.shared.data.Plant
 
 class GardenFragment : Fragment() {
 

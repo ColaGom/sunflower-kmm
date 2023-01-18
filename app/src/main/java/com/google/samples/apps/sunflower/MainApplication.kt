@@ -17,38 +17,20 @@
 package com.google.samples.apps.sunflower
 
 import android.app.Application
-import androidx.work.Configuration
-import androidx.work.DelegatingWorkerFactory
-import com.google.samples.apps.sunflower.di.*
+import com.google.samples.apps.sunflower.di.viewModelModule
+import com.google.samples.apps.sunflower.shared.di.initKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.androidx.workmanager.factory.KoinWorkerFactory
-import org.koin.core.context.startKoin
 
-class MainApplication : Application(), Configuration.Provider {
-    override fun getWorkManagerConfiguration(): Configuration =
-        Configuration.Builder()
-            .setMinimumLoggingLevel(if (BuildConfig.DEBUG) android.util.Log.DEBUG else android.util.Log.ERROR)
-            .apply {
-                val workerFactory =
-                    DelegatingWorkerFactory().also { it.addFactory(KoinWorkerFactory()) }
-                setWorkerFactory(workerFactory)
-            }
-            .build()
-
+class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        startKoin {
-            androidLogger()
+        initKoin(
+            viewModelModule
+        ) {
             androidContext(this@MainApplication)
-            modules(
-                databaseModule,
-                networkModule,
-                repositoryModule,
-                viewModelModule,
-                workerModule
-            )
+            androidLogger()
         }
     }
 }

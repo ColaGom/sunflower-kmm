@@ -32,8 +32,8 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.google.samples.apps.sunflower.R
 import com.google.samples.apps.sunflower.compose.card
 import com.google.samples.apps.sunflower.compose.utils.SunflowerImage
-import com.google.samples.apps.sunflower.data.Plant
-import com.google.samples.apps.sunflower.data.UnsplashPhoto
+import com.google.samples.apps.sunflower.shared.data.Plant
+import com.google.samples.apps.sunflower.shared.data.UnsplashPhoto
 
 @Composable
 fun PlantListItem(plant: Plant, onClick: () -> Unit) {

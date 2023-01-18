@@ -20,7 +20,6 @@ plugins {
     id("kotlin-parcelize")
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.squareup.sqldelight")
 }
 
 android {
@@ -37,9 +36,6 @@ android {
         versionCode = 1
         versionName = "0.1.6"
         vectorDrawables.useSupportLibrary = true
-
-        // Consult the README on instructions for setting up Unsplash API key
-        buildConfigField("String", "UNSPLASH_ACCESS_KEY", "\"" + getUnsplashAccess() + "\"")
     }
     buildTypes {
         release {
@@ -106,7 +102,7 @@ androidComponents {
 }
 
 dependencies {
-    implementation(libs.koin.core)
+    implementation(project(":shared"))
     implementation(libs.koin.androidx.workmanager)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
@@ -124,7 +120,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.material)
     implementation(libs.gson)
-    implementation(libs.okhttp3.logging.interceptor)
+//    implementation(libs.okhttp3.logging.interceptor)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.profileinstaller)
@@ -147,17 +143,6 @@ dependencies {
     implementation(libs.glide)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    // Sql delight
-    implementation(libs.sql.delight.android)
-    implementation(libs.sql.delight.coroutine)
-
-    // Ktor
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.logging)
-    implementation(libs.ktor.client.okHttp)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.ktor.client.contentNegotiation)
-
     // Testing dependencies
     androidTestImplementation(libs.androidx.arch.core.testing)
     androidTestImplementation(libs.androidx.espresso.contrib)
@@ -171,8 +156,4 @@ dependencies {
     androidTestImplementation(libs.accessibility.test.framework)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
-}
-
-fun getUnsplashAccess(): String? {
-    return project.findProperty("unsplash_access_key") as? String
 }

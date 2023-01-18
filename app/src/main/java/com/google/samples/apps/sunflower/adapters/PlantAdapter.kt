@@ -26,7 +26,7 @@ import com.google.accompanist.themeadapter.material.MdcTheme
 import com.google.samples.apps.sunflower.HomeViewPagerFragmentDirections
 import com.google.samples.apps.sunflower.PlantListFragment
 import com.google.samples.apps.sunflower.compose.plantlist.PlantListItem
-import com.google.samples.apps.sunflower.data.Plant
+import com.google.samples.apps.sunflower.shared.data.Plant
 
 /**
  * Adapter for the [RecyclerView] in [PlantListFragment].

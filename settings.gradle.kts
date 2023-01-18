@@ -15,20 +15,29 @@
  */
 
 pluginManagement {
-  repositories {
-    gradlePluginPortal()
-    google()
-    mavenCentral()
-  }
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "com.squareup.sqldelight") {
+                useModule("com.squareup.sqldelight:gradle-plugin:1.5.4")
+            }
+        }
+    }
 }
 
 dependencyResolutionManagement {
-  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-  repositories {
-    google()
-    mavenCentral()
-  }
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 
 include(":app")
 include(":macrobenchmark")
+include(":shared")

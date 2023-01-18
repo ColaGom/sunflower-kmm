@@ -23,8 +23,8 @@ import androidx.work.WorkerParameters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
-import com.google.samples.apps.sunflower.data.Plant
-import com.google.samples.apps.sunflower.data.PlantDao
+import com.google.samples.apps.sunflower.shared.data.Plant
+import com.google.samples.apps.sunflower.shared.data.PlantDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

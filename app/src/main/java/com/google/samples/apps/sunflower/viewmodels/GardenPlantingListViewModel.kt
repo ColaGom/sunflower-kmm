@@ -17,8 +17,8 @@
 package com.google.samples.apps.sunflower.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.google.samples.apps.sunflower.data.GardenPlantingRepository
-import com.google.samples.apps.sunflower.data.PlantAndGardenPlantings
+import com.google.samples.apps.sunflower.shared.data.GardenPlantingRepository
+import com.google.samples.apps.sunflower.shared.data.PlantAndGardenPlantings
 import kotlinx.coroutines.flow.Flow
 
 class GardenPlantingListViewModel(

@@ -18,8 +18,8 @@ package com.google.samples.apps.sunflower.viewmodels
 
 import androidx.lifecycle.*
 import com.google.samples.apps.sunflower.PlantListFragment
-import com.google.samples.apps.sunflower.data.Plant
-import com.google.samples.apps.sunflower.data.PlantRepository
+import com.google.samples.apps.sunflower.shared.data.Plant
+import com.google.samples.apps.sunflower.shared.data.PlantRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
@@ -64,9 +64,9 @@ class PlantListViewModel constructor(
          *    the elements in the `collect`'s lambda block instead of using the `onEach` operator.
          *    This is the version that's used in the live code below.
          *
-         * 3) We can avoid creating a new coroutine using the `launchIn` terminal operator. In this
+         * 3) We can avoid creating a new coroutine.kt using the `launchIn` terminal operator. In this
          *    case, `onEach` is needed because `launchIn` doesn't take a lambda to consume the new
-         *    element in the Flow; it takes a `CoroutineScope` that's used to create a coroutine
+         *    element in the Flow; it takes a `CoroutineScope` that's used to create a coroutine.kt
          *    internally.
          *
          *    growZone.onEach { newGrowZone ->
