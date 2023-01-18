@@ -125,8 +125,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.gson)
     implementation(libs.okhttp3.logging.interceptor)
-    implementation(libs.retrofit2.converter.gson)
-    implementation(libs.retrofit2)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.profileinstaller)
@@ -149,8 +147,17 @@ dependencies {
     implementation(libs.glide)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
+    // Sql delight
     implementation(libs.sql.delight.android)
     implementation(libs.sql.delight.coroutine)
+
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.okHttp)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.contentNegotiation)
+
     // Testing dependencies
     androidTestImplementation(libs.androidx.arch.core.testing)
     androidTestImplementation(libs.androidx.espresso.contrib)

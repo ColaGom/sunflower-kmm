@@ -17,9 +17,28 @@
 package com.google.samples.apps.sunflower.di
 
 import com.google.samples.apps.sunflower.api.UnsplashService
+import io.ktor.client.*
+import io.ktor.client.engine.okhttp.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 
+private const val BASE_URL = "https://api.unsplash.com/"
+
 val networkModule = module {
-    single { UnsplashService.create() }
+    single {
+        HttpClient(OkHttp) {
+            install(ContentNegotiation) {
+                json()
+            }
+
+            defaultRequest {
+                url(BASE_URL)
+            }
+        }
+    }
+    singleOf(::UnsplashService)
 }
