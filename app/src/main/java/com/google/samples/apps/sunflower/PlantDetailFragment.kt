@@ -65,7 +65,7 @@ class PlantDetailFragment : Fragment() {
     }
 
     private fun navigateToGallery() {
-        plantDetailViewModel.plant.value?.let { plant ->
+        plantDetailViewModel.state.value.plant?.let { plant ->
             val direction =
                 PlantDetailFragmentDirections.actionPlantDetailFragmentToGalleryFragment(plant.name)
             findNavController().navigate(direction)
@@ -76,7 +76,7 @@ class PlantDetailFragment : Fragment() {
     // Should be used when user presses a share button/menu item.
     @Suppress("DEPRECATION")
     private fun createShareIntent() {
-        val shareText = plantDetailViewModel.plant.value.let { plant ->
+        val shareText = plantDetailViewModel.state.value.plant.let { plant ->
             if (plant == null) {
                 ""
             } else {

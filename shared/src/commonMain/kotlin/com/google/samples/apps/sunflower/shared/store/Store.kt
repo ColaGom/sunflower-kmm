@@ -14,27 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.sunflower.shared.di
+package com.google.samples.apps.sunflower.shared.store
 
-import org.koin.core.KoinApplication
-import org.koin.core.context.startKoin
-import org.koin.core.module.Module
-import org.koin.dsl.KoinAppDeclaration
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
-expect val platformModule: Module
-expect val API_ACCESS_KEY: String
-
-fun initKoin(
-    vararg appModule: Module,
-    appDeclaration: KoinAppDeclaration
-): KoinApplication = startKoin {
-    appDeclaration(this)
-    modules(
-        *appModule,
-        platformModule,
-        databaseModule,
-        networkModule,
-        repositoryModule,
-        storeModule
-    )
+interface Store<STATE : State, ACTION : Action, SIDE : SideEffect> {
+    val state: StateFlow<STATE>
+    val event: Flow<SIDE>
+    fun dispatch(action: ACTION)
 }

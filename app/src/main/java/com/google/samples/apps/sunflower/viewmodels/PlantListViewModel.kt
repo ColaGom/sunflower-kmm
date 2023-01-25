@@ -16,79 +16,54 @@
 
 package com.google.samples.apps.sunflower.viewmodels
 
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.samples.apps.sunflower.PlantListFragment
-import com.google.samples.apps.sunflower.shared.data.Plant
-import com.google.samples.apps.sunflower.shared.data.PlantRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
+import com.google.samples.apps.sunflower.shared.store.PlantListAction
+import com.google.samples.apps.sunflower.shared.store.PlantListStore
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
 
 /**
  * The ViewModel for [PlantListFragment].
  */
-class PlantListViewModel constructor(
-    plantRepository: PlantRepository,
+class PlantListViewModel(
     private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
 
-    private val growZone: MutableStateFlow<Int> = MutableStateFlow(
-        savedStateHandle.get(GROW_ZONE_SAVED_STATE_KEY) ?: NO_GROW_ZONE
-    )
+    private val initialGrowZone = savedStateHandle[GROW_ZONE_SAVED_STATE_KEY] ?: NO_GROW_ZONE
 
-    val plants: LiveData<List<Plant>> = growZone.flatMapLatest { zone ->
-        if (zone == NO_GROW_ZONE) {
-            plantRepository.getPlants()
-        } else {
-            plantRepository.getPlantsWithGrowZoneNumber(zone)
-        }
-    }.asLiveData()
+    private val store = get<PlantListStore> {
+        parametersOf(initialGrowZone, viewModelScope)
+    }
+
+    val plants = store.state.map {
+        it.plants
+    }.distinctUntilChanged()
 
     init {
-
-        /**
-         * When `growZone` changes, store the new value in `savedStateHandle`.
-         *
-         * There are a few ways to write this; all of these are equivalent. (This info is from
-         * https://github.com/android/sunflower/pull/671#pullrequestreview-548900174)
-         *
-         * 1) A verbose version:
-         *
-         *    viewModelScope.launch {
-         *        growZone.onEach { newGrowZone ->
-         *            savedStateHandle.set(GROW_ZONE_SAVED_STATE_KEY, newGrowZone)
-         *        }
-         *    }.collect()
-         *
-         * 2) A simpler version of 1). Since we're calling `collect`, we can consume
-         *    the elements in the `collect`'s lambda block instead of using the `onEach` operator.
-         *    This is the version that's used in the live code below.
-         *
-         * 3) We can avoid creating a new coroutine.kt using the `launchIn` terminal operator. In this
-         *    case, `onEach` is needed because `launchIn` doesn't take a lambda to consume the new
-         *    element in the Flow; it takes a `CoroutineScope` that's used to create a coroutine.kt
-         *    internally.
-         *
-         *    growZone.onEach { newGrowZone ->
-         *        savedStateHandle.set(GROW_ZONE_SAVED_STATE_KEY, newGrowZone)
-         *    }.launchIn(viewModelScope)
-         */
         viewModelScope.launch {
-            growZone.collect { newGrowZone ->
-                savedStateHandle.set(GROW_ZONE_SAVED_STATE_KEY, newGrowZone)
-            }
+            store.state.map { it.growZone }
+                .distinctUntilChanged()
+                .collect { newGrowZone ->
+                    savedStateHandle[GROW_ZONE_SAVED_STATE_KEY] = newGrowZone
+                }
         }
     }
 
-    fun setGrowZoneNumber(num: Int) {
-        growZone.value = num
+    fun toggleGrowZone() {
+        val action = if (isFiltered()) PlantListAction.ClearGrowZone
+        else PlantListAction.ChangeGrowZone(9)
+
+        store.dispatch(action)
     }
 
-    fun clearGrowZoneNumber() {
-        growZone.value = NO_GROW_ZONE
-    }
-
-    fun isFiltered() = growZone.value != NO_GROW_ZONE
+    private fun isFiltered() = store.state.value.growZone != NO_GROW_ZONE
 
     companion object {
         private const val NO_GROW_ZONE = -1

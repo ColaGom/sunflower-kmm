@@ -26,9 +26,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.samples.apps.sunflower.HomeViewPagerFragmentDirections
 import com.google.samples.apps.sunflower.R
-import com.google.samples.apps.sunflower.shared.data.PlantAndGardenPlantings
 import com.google.samples.apps.sunflower.databinding.ListItemGardenPlantingBinding
-import com.google.samples.apps.sunflower.viewmodels.PlantAndGardenPlantingsViewModel
+import com.google.samples.apps.sunflower.shared.data.PlantAndGardenPlantings
+import com.google.samples.apps.sunflower.shared.model.PlantAndGardenPlantingsUiModel
 
 class GardenPlantingAdapter :
     ListAdapter<PlantAndGardenPlantings, GardenPlantingAdapter.ViewHolder>(
@@ -55,7 +55,7 @@ class GardenPlantingAdapter :
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.setClickListener { view ->
-                binding.viewModel?.plantId?.let { plantId ->
+                binding.model?.plantId?.let { plantId ->
                     navigateToPlant(plantId, view)
                 }
             }
@@ -69,7 +69,7 @@ class GardenPlantingAdapter :
 
         fun bind(plantings: PlantAndGardenPlantings) {
             with(binding) {
-                viewModel = PlantAndGardenPlantingsViewModel(plantings)
+                model = PlantAndGardenPlantingsUiModel(plantings)
                 executePendingBindings()
             }
         }

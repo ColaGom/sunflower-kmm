@@ -69,8 +69,8 @@ import com.google.samples.apps.sunflower.compose.Dimens
 import com.google.samples.apps.sunflower.compose.utils.SunflowerImage
 import com.google.samples.apps.sunflower.compose.utils.TextSnackbarContainer
 import com.google.samples.apps.sunflower.compose.visible
-import com.google.samples.apps.sunflower.shared.data.Plant
 import com.google.samples.apps.sunflower.databinding.ItemPlantDescriptionBinding
+import com.google.samples.apps.sunflower.shared.data.Plant
 import com.google.samples.apps.sunflower.viewmodels.PlantDetailViewModel
 
 /**
@@ -91,11 +91,12 @@ fun PlantDetailsScreen(
     onShareClick: () -> Unit,
     onGalleryClick: () -> Unit,
 ) {
-    val plant = plantDetailsViewModel.plant.observeAsState().value
-    val isPlanted = plantDetailsViewModel.isPlanted.observeAsState().value
+    val state by plantDetailsViewModel.state.collectAsState()
+    val plant = state.plant
+    val isPlanted = state.isPlanted
     val showSnackbar = plantDetailsViewModel.showSnackbar.observeAsState().value
 
-    if (plant != null && isPlanted != null && showSnackbar != null) {
+    if (plant != null && showSnackbar != null) {
         Surface {
             TextSnackbarContainer(
                 snackbarText = stringResource(R.string.added_plant_to_garden),
@@ -105,7 +106,7 @@ fun PlantDetailsScreen(
                 PlantDetails(
                     plant,
                     isPlanted,
-                    plantDetailsViewModel.hasValidUnsplashKey(),
+                    state.hasValidUnsplashKey,
                     PlantDetailsCallbacks(
                         onBackClick = onBackClick,
                         onFabClick = {

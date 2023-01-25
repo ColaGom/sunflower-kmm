@@ -19,26 +19,23 @@ package com.google.samples.apps.sunflower.viewmodels
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.samples.apps.sunflower.shared.data.UnsplashPhoto
-import com.google.samples.apps.sunflower.shared.data.UnsplashRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import com.google.samples.apps.sunflower.shared.store.GalleryStore
+import com.google.samples.apps.sunflower.shared.store.LoadMore
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
 
 class GalleryViewModel(
-    savedStateHandle: SavedStateHandle,
-    repository: UnsplashRepository
-) : ViewModel() {
+    savedStateHandle: SavedStateHandle
+) : ViewModel(), KoinComponent {
 
     private var queryString: String? = savedStateHandle["plantName"]
+    private val store = get<GalleryStore> {
+        parametersOf(viewModelScope, queryString)
+    }
+    val state = store.state
 
-    private val _plantPictures = MutableStateFlow<List<UnsplashPhoto>>(emptyList())
-    val plantPictures = _plantPictures.asStateFlow()
-
-    init {
-        //TODO: pagination
-        viewModelScope.launch {
-            _plantPictures.value = repository.getSearchResultStream(queryString ?: "").results
-        }
+    fun onLoadMore() {
+        store.dispatch(LoadMore)
     }
 }

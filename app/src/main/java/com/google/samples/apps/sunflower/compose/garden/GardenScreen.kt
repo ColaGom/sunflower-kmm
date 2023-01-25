@@ -27,6 +27,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -47,20 +48,22 @@ import com.google.samples.apps.sunflower.compose.utils.SunflowerImage
 import com.google.samples.apps.sunflower.shared.data.GardenPlanting
 import com.google.samples.apps.sunflower.shared.data.Plant
 import com.google.samples.apps.sunflower.shared.data.PlantAndGardenPlantings
-import com.google.samples.apps.sunflower.viewmodels.GardenPlantingListViewModel
-import com.google.samples.apps.sunflower.viewmodels.PlantAndGardenPlantingsViewModel
-import org.koin.androidx.compose.getViewModel
+import com.google.samples.apps.sunflower.shared.model.PlantAndGardenPlantingsUiModel
+import com.google.samples.apps.sunflower.shared.store.GardenPlantingListStore
+import org.koin.androidx.compose.get
+import org.koin.core.parameter.parametersOf
 import java.util.*
 
 @Composable
 fun GardenScreen(
-    viewModel: GardenPlantingListViewModel = getViewModel(),
     onAddPlantClick: () -> Unit,
     onPlantClick: (PlantAndGardenPlantings) -> Unit
 ) {
-    val gardenPlants by viewModel.plantAndGardenPlantings.collectAsState(initial = emptyList())
+    val scope = rememberCoroutineScope()
+    val store = get<GardenPlantingListStore> { parametersOf(scope) }
+    val state by store.state.collectAsState()
     GardenScreen(
-        gardenPlants = gardenPlants,
+        gardenPlants = state.plantAndGardenPlantings,
         onAddPlantClick = onAddPlantClick,
         onPlantClick = onPlantClick
     )
@@ -103,7 +106,7 @@ private fun GardenList(
 }
 
 @OptIn(
-    ExperimentalMaterialApi::class, ExperimentalGlideComposeApi::class,
+    ExperimentalMaterialApi::class,
     ExperimentalComposeUiApi::class
 )
 @Composable
@@ -111,7 +114,7 @@ private fun GardenListItem(
     plant: PlantAndGardenPlantings,
     onPlantClick: (PlantAndGardenPlantings) -> Unit
 ) {
-    val vm = PlantAndGardenPlantingsViewModel(plant)
+    val vm = PlantAndGardenPlantingsUiModel(plant)
 
     // Dimensions
     val cardSideMargin = dimensionResource(id = R.dimen.card_side_margin)

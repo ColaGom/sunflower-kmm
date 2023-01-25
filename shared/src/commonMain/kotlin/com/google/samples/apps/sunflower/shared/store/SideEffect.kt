@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.sunflower.viewmodels
+package com.google.samples.apps.sunflower.shared.store
 
-import androidx.lifecycle.ViewModel
-import com.google.samples.apps.sunflower.shared.data.GardenPlantingRepository
-import com.google.samples.apps.sunflower.shared.data.PlantAndGardenPlantings
-import kotlinx.coroutines.flow.Flow
-
-class GardenPlantingListViewModel(
-    gardenPlantingRepository: GardenPlantingRepository
-) : ViewModel() {
-    val plantAndGardenPlantings: Flow<List<PlantAndGardenPlantings>> =
-        gardenPlantingRepository.getPlantedGardens()
-}
+interface SideEffect

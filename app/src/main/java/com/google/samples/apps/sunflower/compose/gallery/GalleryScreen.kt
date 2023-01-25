@@ -20,13 +20,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -39,27 +39,16 @@ import com.google.samples.apps.sunflower.shared.data.UnsplashPhoto
 import com.google.samples.apps.sunflower.shared.data.UnsplashPhotoUrls
 import com.google.samples.apps.sunflower.shared.data.UnsplashUser
 import com.google.samples.apps.sunflower.viewmodels.GalleryViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.getViewModel
+
 
 @Composable
 fun GalleryScreen(
-    viewModel: GalleryViewModel = getViewModel(),
-    onPhotoClick: (UnsplashPhoto) -> Unit,
-    onUpClick: () -> Unit,
-) {
-    val items by viewModel.plantPictures.collectAsState()
-    GalleryScreen(
-        plantPictures = items,
-        onPhotoClick = onPhotoClick,
-        onUpClick = onUpClick,
-    )
-}
-
-@Composable
-private fun GalleryScreen(
     plantPictures: List<UnsplashPhoto>,
     onPhotoClick: (UnsplashPhoto) -> Unit = {},
     onUpClick: () -> Unit = {},
+    onLoadMore: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -79,10 +68,17 @@ private fun GalleryScreen(
             )
         },
     ) { padding ->
+        val gridState = rememberLazyGridState()
+
+        LoadMore(listState = gridState) {
+            onLoadMore()
+        }
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier.padding(padding),
-            contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.card_side_margin))
+            contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.card_side_margin)),
+            state = gridState
         ) {
             items(
                 count = plantPictures.size,
@@ -94,6 +90,22 @@ private fun GalleryScreen(
             }
         }
     }
+}
+
+@Composable
+fun GalleryScreen(
+    onPhotoClick: (UnsplashPhoto) -> Unit = {},
+    onUpClick: () -> Unit = {},
+) {
+    val viewModel = getViewModel<GalleryViewModel>()
+    val state by viewModel.state.collectAsState()
+    val plantPictures = state.plantPictures
+    GalleryScreen(
+        plantPictures = plantPictures,
+        onPhotoClick,
+        onUpClick,
+        viewModel::onLoadMore
+    )
 }
 
 @Preview
@@ -122,4 +134,29 @@ private class GalleryScreenPreviewParamProvider :
                 )
             )
         )
+}
+
+@Composable
+fun LoadMore(
+    listState: LazyGridState,
+    threshold: Int = 3,
+    onLoadMore: () -> Unit
+) {
+    val loadMore = remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val total = layoutInfo.totalItemsCount
+            val lastItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
+
+            lastItemIndex > (total - threshold)
+        }
+    }
+
+    LaunchedEffect(loadMore) {
+        snapshotFlow { loadMore.value }
+            .distinctUntilChanged()
+            .collect {
+                onLoadMore()
+            }
+    }
 }

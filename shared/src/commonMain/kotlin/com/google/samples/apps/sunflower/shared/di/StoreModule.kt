@@ -16,25 +16,16 @@
 
 package com.google.samples.apps.sunflower.shared.di
 
-import org.koin.core.KoinApplication
-import org.koin.core.context.startKoin
-import org.koin.core.module.Module
-import org.koin.dsl.KoinAppDeclaration
+import com.google.samples.apps.sunflower.shared.store.GalleryStore
+import com.google.samples.apps.sunflower.shared.store.GardenPlantingListStore
+import com.google.samples.apps.sunflower.shared.store.PlantDetailStore
+import com.google.samples.apps.sunflower.shared.store.PlantListStore
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.module
 
-expect val platformModule: Module
-expect val API_ACCESS_KEY: String
-
-fun initKoin(
-    vararg appModule: Module,
-    appDeclaration: KoinAppDeclaration
-): KoinApplication = startKoin {
-    appDeclaration(this)
-    modules(
-        *appModule,
-        platformModule,
-        databaseModule,
-        networkModule,
-        repositoryModule,
-        storeModule
-    )
+val storeModule = module {
+    factoryOf(::GalleryStore)
+    factoryOf(::GardenPlantingListStore)
+    factoryOf(::PlantDetailStore)
+    factoryOf(::PlantListStore)
 }

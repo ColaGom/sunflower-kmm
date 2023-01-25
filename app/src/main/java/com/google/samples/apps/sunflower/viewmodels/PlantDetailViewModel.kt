@@ -18,23 +18,25 @@ package com.google.samples.apps.sunflower.viewmodels
 
 import androidx.lifecycle.*
 import com.google.samples.apps.sunflower.PlantDetailFragment
-import com.google.samples.apps.sunflower.shared.data.GardenPlantingRepository
-import com.google.samples.apps.sunflower.shared.data.PlantRepository
+import com.google.samples.apps.sunflower.shared.store.PlantDetailAction
+import com.google.samples.apps.sunflower.shared.store.PlantDetailStore
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
 
 /**
  * The ViewModel used in [PlantDetailFragment].
  */
 class PlantDetailViewModel(
     savedStateHandle: SavedStateHandle,
-    plantRepository: PlantRepository,
-    private val gardenPlantingRepository: GardenPlantingRepository,
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
+    private val plantId: String = savedStateHandle.get<String>(PLANT_ID_SAVED_STATE_KEY)!!
+    private val store = get<PlantDetailStore> {
+        parametersOf(plantId, viewModelScope)
+    }
 
-    val plantId: String = savedStateHandle.get<String>(PLANT_ID_SAVED_STATE_KEY)!!
-
-    val isPlanted = gardenPlantingRepository.isPlanted(plantId).asLiveData()
-    val plant = plantRepository.getPlant(plantId).asLiveData()
+    val state = store.state
 
     private val _showSnackbar = MutableLiveData(false)
     val showSnackbar: LiveData<Boolean>
@@ -42,16 +44,14 @@ class PlantDetailViewModel(
 
     fun addPlantToGarden() {
         viewModelScope.launch {
-            gardenPlantingRepository.createGardenPlanting(plantId)
             _showSnackbar.value = true
         }
+        store.dispatch(PlantDetailAction.AddPlantToGarden)
     }
 
     fun dismissSnackbar() {
         _showSnackbar.value = false
     }
-
-    fun hasValidUnsplashKey() = true
 
     companion object {
         private const val PLANT_ID_SAVED_STATE_KEY = "plantId"

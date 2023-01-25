@@ -14,27 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.sunflower.shared.di
+package com.google.samples.apps.sunflower.shared.store
 
-import org.koin.core.KoinApplication
-import org.koin.core.context.startKoin
-import org.koin.core.module.Module
-import org.koin.dsl.KoinAppDeclaration
+sealed interface Action
 
-expect val platformModule: Module
-expect val API_ACCESS_KEY: String
-
-fun initKoin(
-    vararg appModule: Module,
-    appDeclaration: KoinAppDeclaration
-): KoinApplication = startKoin {
-    appDeclaration(this)
-    modules(
-        *appModule,
-        platformModule,
-        databaseModule,
-        networkModule,
-        repositoryModule,
-        storeModule
-    )
-}
+object Refresh : Action
+object LoadMore : Action

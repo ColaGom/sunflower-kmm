@@ -14,27 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.sunflower.shared.di
+package com.google.samples.apps.sunflower.shared.common
 
-import org.koin.core.KoinApplication
-import org.koin.core.context.startKoin
-import org.koin.core.module.Module
-import org.koin.dsl.KoinAppDeclaration
+import kotlinx.datetime.Instant
+import java.text.SimpleDateFormat
+import java.util.*
 
-expect val platformModule: Module
-expect val API_ACCESS_KEY: String
-
-fun initKoin(
-    vararg appModule: Module,
-    appDeclaration: KoinAppDeclaration
-): KoinApplication = startKoin {
-    appDeclaration(this)
-    modules(
-        *appModule,
-        platformModule,
-        databaseModule,
-        networkModule,
-        repositoryModule,
-        storeModule
-    )
+actual object DateFormatter {
+    actual fun format(instant: Instant): String = dateFormat.format(instant.toJavaDate())
+    private val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.US)
 }
+
+fun Instant.toJavaDate() = Date(toEpochMilliseconds())

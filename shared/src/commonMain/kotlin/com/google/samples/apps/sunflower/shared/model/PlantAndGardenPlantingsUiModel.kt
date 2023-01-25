@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.sunflower.viewmodels
+package com.google.samples.apps.sunflower.shared.model
 
-import com.google.samples.apps.sunflower.ext.toJavaDate
+import com.google.samples.apps.sunflower.shared.common.DateFormatter
 import com.google.samples.apps.sunflower.shared.data.PlantAndGardenPlantings
-import java.text.SimpleDateFormat
-import java.util.*
+import com.google.samples.apps.sunflower.shared.store.State
 
-class PlantAndGardenPlantingsViewModel(plantings: PlantAndGardenPlantings) {
+class PlantAndGardenPlantingsUiModel(
+    plantings: PlantAndGardenPlantings
+) : State {
     private val plant = checkNotNull(plantings.plant)
     private val gardenPlanting = plantings.gardenPlantings[0]
 
-    val waterDateString: String = dateFormat.format(gardenPlanting.lastWateringDate.toJavaDate())
+    val waterDateString: String = DateFormatter.format(gardenPlanting.lastWateringDate)
     val wateringInterval
         get() = plant.wateringInterval
     val imageUrl
@@ -33,11 +34,7 @@ class PlantAndGardenPlantingsViewModel(plantings: PlantAndGardenPlantings) {
     val plantName
         get() = plant.name
 
-    val plantDateString: String = dateFormat.format(gardenPlanting.plantDate.toJavaDate())
+    val plantDateString: String = DateFormatter.format(gardenPlanting.plantDate)
     val plantId
         get() = plant.plantId
-
-    companion object {
-        private val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.US)
-    }
 }

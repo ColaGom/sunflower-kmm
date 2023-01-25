@@ -17,7 +17,6 @@
 package com.google.samples.apps.sunflower.di
 
 import com.google.samples.apps.sunflower.viewmodels.GalleryViewModel
-import com.google.samples.apps.sunflower.viewmodels.GardenPlantingListViewModel
 import com.google.samples.apps.sunflower.viewmodels.PlantDetailViewModel
 import com.google.samples.apps.sunflower.viewmodels.PlantListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -25,7 +24,6 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModelOf(::GalleryViewModel)
-    viewModelOf(::GardenPlantingListViewModel)
     viewModelOf(::PlantDetailViewModel)
     viewModelOf(::PlantListViewModel)
 }
