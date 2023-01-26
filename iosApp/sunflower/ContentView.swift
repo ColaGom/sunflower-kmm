@@ -10,13 +10,24 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var viewModel: PlantListViewModel = PlantListViewModel()
     
-    var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
+    
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns) {
                 ForEach(viewModel.plants, id: \.self) { plant in
-                    Text(plant.name)
+                    VStack {
+                        Text(plant.name)
+                        AsyncImage(url: URL(string: plant.imageUrl)) { phase in
+                            phase.image?.resizable()
+                                .aspectRatio(contentMode: .fit)
+                        }
+                        
+                    }.frame(height:150)
                 }
             }
         }
@@ -26,5 +37,21 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+extension UIImageView {
+    func loadFrom(URLAddress: String) {
+        guard let url = URL(string: URLAddress) else {
+            return
+        }
+        
+        DispatchQueue.main.async { [weak self] in
+            if let imageData = try? Data(contentsOf: url) {
+                if let loadedImage = UIImage(data: imageData) {
+                    self?.image = loadedImage
+                }
+            }
+        }
     }
 }
