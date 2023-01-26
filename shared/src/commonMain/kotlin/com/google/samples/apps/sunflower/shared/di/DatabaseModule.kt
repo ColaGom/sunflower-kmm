@@ -17,7 +17,6 @@
 package com.google.samples.apps.sunflower.shared.di
 
 import com.google.samples.apps.sunflower.Database
-import com.google.samples.apps.sunflower.shared.common.DatabaseInitializer
 import com.google.samples.apps.sunflower.shared.data.GardenPlantingDao
 import com.google.samples.apps.sunflower.shared.data.PlantDao
 import org.koin.core.module.dsl.factoryOf
@@ -29,5 +28,4 @@ val databaseModule = module {
     factory { get<Database>().plantsQueries }
     factoryOf(::PlantDao)
     factoryOf(::GardenPlantingDao)
-    factoryOf(::DatabaseInitializer)
 }

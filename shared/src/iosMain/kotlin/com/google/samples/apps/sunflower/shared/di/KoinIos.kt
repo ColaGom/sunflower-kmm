@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package com.google.samples.apps.sunflower.shared.common
+package com.google.samples.apps.sunflower.shared.di
 
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toNSDate
-import platform.Foundation.*
+import com.google.samples.apps.sunflower.shared.store.PlantListStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
 
-actual object DateFormatter {
-    actual fun format(instant: Instant): String {
-        val formatter = NSDateFormatter()
-        formatter.dateFormat = "MMM d, yyyy"
-        formatter.timeZone = NSTimeZone.localTimeZone
-        formatter.locale = NSLocale.autoupdatingCurrentLocale
-        return formatter.stringFromDate(instant.toNSDate())
+fun startKoin() = initKoin(
+    module {
+        factory<CoroutineScope> { MainScope() }
     }
+) {}
+
+class StoreComponent : KoinComponent {
+    fun plantList(growZone: Int) = get<PlantListStore> { parametersOf(growZone) }
 }

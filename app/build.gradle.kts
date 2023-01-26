@@ -121,7 +121,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.gson)
 //    implementation(libs.okhttp3.logging.interceptor)
-    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.tracing.ktx)

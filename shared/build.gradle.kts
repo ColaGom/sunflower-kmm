@@ -50,7 +50,6 @@ kotlin {
                 implementation(libs.ktor.client.logging)
                 implementation(libs.ktor.client.serialization)
                 implementation(libs.ktor.client.contentNegotiation)
-                implementation(libs.okio)
             }
         }
         val commonTest by getting {
@@ -109,5 +108,5 @@ sqldelight {
     database("Database") {
         packageName = "com.google.samples.apps.sunflower"
     }
-    linkSqlite = false
+    linkSqlite = true
 }

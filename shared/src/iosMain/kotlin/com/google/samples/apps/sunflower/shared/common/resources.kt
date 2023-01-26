@@ -16,8 +16,32 @@
 
 package com.google.samples.apps.sunflower.shared.common
 
+import kotlinx.cinterop.*
+import platform.Foundation.*
+import platform.darwin.NSObject
+import platform.darwin.NSObjectMeta
+
 actual class SeedResourceReader {
+    private val bundle: NSBundle = NSBundle.bundleForClass(BundleMarker)
     actual fun read(): String {
-        TODO("Not yet implemented")
+        val path = bundle.pathForResource("plants", "json") ?: error(
+            "Not found plants.json file"
+        )
+
+        return memScoped {
+            val errorPtr = alloc<ObjCObjectVar<NSError?>>()
+
+            NSString.stringWithContentsOfFile(
+                path,
+                encoding = NSUTF8StringEncoding,
+                error = errorPtr.ptr
+            ) ?: run {
+                error("Couldn't load resource: plants.json Error: ${errorPtr.value?.localizedDescription} - ${errorPtr.value}")
+            }
+        }
+    }
+
+    private class BundleMarker : NSObject() {
+        companion object : NSObjectMeta()
     }
 }
