@@ -8,7 +8,7 @@ Android            |  iOS
 ### Migration Targets
 - Data Layer
 - Domain Layer
-- Presenter Layer
+- Presentation Layer
   - Only `ViewModel`
 
 ### Migration Steps
