@@ -1,3 +1,5 @@
+[Medium, Sunflower seeds of KMM](https://medium.com/@bchoi000/sunflower-flavor-kmm-get-started-with-kotlin-multiplatform-mobile-9dc014c45b95)
+
 # Android Sunflower with KMM
 ⚠️ ⚠️ This project is only a sample project to show the KMM project migration tasks. thus it has been omitted tasks for production project such as test code, optimization and logging.⚠️ ⚠️ 
 
