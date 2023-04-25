@@ -19,6 +19,7 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        mavenLocal()
     }
 
     resolutionStrategy {

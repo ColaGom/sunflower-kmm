@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.dsl.module
-import sunflower_kmm.shared.BuildConfig
 
 
 actual val platformModule = module {
@@ -28,8 +27,6 @@ actual val platformModule = module {
         )
     }
 }
-
-actual val API_ACCESS_KEY: String = BuildConfig.UNSPLASH_KEY
 
 private class CustomCallback : SupportSQLiteOpenHelper.Callback(Database.Schema.version),
     KoinComponent {

@@ -22,7 +22,6 @@ import org.koin.core.module.Module
 import org.koin.dsl.KoinAppDeclaration
 
 expect val platformModule: Module
-expect val API_ACCESS_KEY: String
 
 fun initKoin(
     vararg appModule: Module,

@@ -16,8 +16,8 @@
 
 package com.google.samples.apps.sunflower.shared.api
 
+import com.google.samples.apps.sunflower.shared.common.API_ACCESS_KEY
 import com.google.samples.apps.sunflower.shared.data.UnsplashSearchResponse
-import com.google.samples.apps.sunflower.shared.di.API_ACCESS_KEY
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*

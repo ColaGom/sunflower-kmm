@@ -20,6 +20,34 @@ plugins {
     id("kotlinx-serialization")
     id("com.squareup.sqldelight")
     id("com.github.gmazzo.buildconfig") version "3.1.0"
+    id("SpmDeploy") version "1.0-SNAPSHOT"
+    kotlin("native.cocoapods")
+    `maven-publish`
+}
+
+group = "com.samples.apps.sunflower"
+version = "1.0.0"
+
+publishing {
+    repositories {
+        maven {
+            val prop =
+                com.android.build.gradle.internal.cxx.configure.gradleLocalProperties(rootDir)
+
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/ColaGom/sunflower-kmm")
+            credentials {
+                username = "${prop.getProperty("github_username")}"
+                password = "${prop.getProperty("github_password")}"
+            }
+        }
+    }
+}
+
+spmDeploy {
+    frameworkName.set("Shared")
+    buildType.set(org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.DEBUG)
+    publicationName.set("SunflowerShared")
 }
 
 buildConfig {
@@ -37,6 +65,18 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
+        }
+    }
+
+    cocoapods {
+        version = "1.0"
+        name = "Shared"
+        summary = "Shared module for KMM Sunflower"
+        homepage = ""
+        ios.deploymentTarget = "14.0"
+        framework {
+            isStatic = false
+            baseName = "Shared"
         }
     }
 

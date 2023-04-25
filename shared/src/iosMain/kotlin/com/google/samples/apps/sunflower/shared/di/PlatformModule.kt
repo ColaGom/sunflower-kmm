@@ -11,7 +11,6 @@ import io.ktor.client.engine.darwin.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.koin.dsl.module
-import sunflower_kmm.shared.BuildConfig
 
 actual val platformModule = module {
     single { Darwin.create { } }
@@ -36,5 +35,3 @@ actual val platformModule = module {
         NativeSqliteDriver(configuration)
     }
 }
-
-actual val API_ACCESS_KEY = BuildConfig.UNSPLASH_KEY

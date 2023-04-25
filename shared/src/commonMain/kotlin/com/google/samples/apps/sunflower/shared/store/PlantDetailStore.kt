@@ -16,19 +16,19 @@
 
 package com.google.samples.apps.sunflower.shared.store
 
+import com.google.samples.apps.sunflower.shared.common.API_ACCESS_KEY
 import com.google.samples.apps.sunflower.shared.data.GardenPlantingRepository
 import com.google.samples.apps.sunflower.shared.data.Plant
 import com.google.samples.apps.sunflower.shared.data.PlantRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import sunflower_kmm.shared.BuildConfig
 
 data class PlantDetailState(
     val plantId: String,
     val plant: Plant? = null,
     val isPlanted: Boolean = false,
-    val hasValidUnsplashKey: Boolean = BuildConfig.UNSPLASH_KEY.isNotBlank()
+    val hasValidUnsplashKey: Boolean = API_ACCESS_KEY.isNotBlank()
 ) : State
 
 sealed interface PlantDetailAction : Action {
