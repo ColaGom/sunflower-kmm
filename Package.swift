@@ -15,8 +15,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "Shared",
-            url: "https://maven.pkg.github.com/ColaGom/sunflower-kmm/com/samples/apps/sunflower/shared/1.0.1/shared-1.0.1.zip",
-            checksum: "f4df5f9f3a6bf35754fc157fad012e5cdbff8bf47b2d92b8e35840406344ffb6"
+            url: "https://maven.pkg.github.com/ColaGom/sunflower-kmm/com/samples/apps/sunflower/shared/1.0.2/shared-1.0.2.zip",
+            checksum: "46e6210d5a275334a047c766ed21294cd1594b65343fdb343ffa7ad4130ce781"
         )
     ]
 )

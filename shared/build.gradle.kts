@@ -20,13 +20,13 @@ plugins {
     id("kotlinx-serialization")
     id("com.squareup.sqldelight")
     id("com.github.gmazzo.buildconfig") version "3.1.0"
-    id("SpmDeploy") version "1.0-SNAPSHOT"
+    id("io.github.colagom.deploy") version "1.0.0"
     kotlin("native.cocoapods")
     `maven-publish`
 }
 
 group = "com.samples.apps.sunflower"
-version = "1.0.1"
+version = "1.0.2"
 
 publishing {
     repositories {
